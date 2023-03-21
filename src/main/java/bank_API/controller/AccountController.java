@@ -31,7 +31,7 @@ public class AccountController {
         return "account created";
     }
 
-    @GetMapping("/balanceID:BE{id}")
+    @GetMapping("/balance:BE{id}")
     public String getBalanceById(@PathVariable Long id) {
         Optional<Account> account = accountService.getAccountById(id);
          if (account.isPresent()) {
@@ -78,16 +78,17 @@ public class AccountController {
     }
 
 
-
-
     @DeleteMapping("/BE{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
+    public ResponseEntity<String> deleteAccount(@PathVariable Long id) {
         Optional<Account> account = accountService.getAccountById(id);
         if (account.isPresent()) {
+            String AccountName = account.get().getName();
             accountService.deleteAccount(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok("The bank account with number BE" + id + " and name " + AccountName + " has been deleted.");
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
+
+
 }

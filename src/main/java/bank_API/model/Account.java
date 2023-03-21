@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @Entity
@@ -17,6 +19,7 @@ public class Account {
     private Long id;
     private String name;
     private double balance;
+
 
     public Account() {
     }
