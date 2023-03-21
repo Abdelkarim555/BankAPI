@@ -1,5 +1,6 @@
 package bank_API.model;
 
+import jakarta.persistence.ElementCollection;
 import jdk.jfr.DataAmount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,8 @@ public class Account {
     private Long id;
     private String name;
     private double balance;
-
+    @ElementCollection
+    private List<String> accountHolders;
 
     public Account() {
     }
@@ -46,6 +48,14 @@ public class Account {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public List<String> getAccountHolders() {
+        return accountHolders;
+    }
+
+    public void setAccountHolders(List<String> accountHolders) {
+        this.accountHolders = accountHolders;
     }
 }
 

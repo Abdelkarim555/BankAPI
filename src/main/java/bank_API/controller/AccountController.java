@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public class AccountController {
         }
     }
 
-    // Withdraw money from account
+
     @PostMapping("/BE{id}/withdraw")
     public String withdrawFromAccount(@PathVariable Long id, @RequestParam double amount) {
         Optional<Account> account = accountService.getAccountById(id);
@@ -62,7 +63,7 @@ public class AccountController {
         }
     }
 
-    // Deposit money into account
+
     @PostMapping("/BE{id}/deposit")
     public String depositToAccount(@PathVariable Long id, @RequestParam double amount) {
         Optional<Account> account = accountService.getAccountById(id);
@@ -90,5 +91,40 @@ public class AccountController {
         }
     }
 
+    @GetMapping("/jointaccounts")
+    public List<Account> getJointAccounts(@RequestParam String name1, @RequestParam String name2) {
+        List<Account> allAccounts = accountService.getAllAccounts();
+        List<Account> jointAccounts = new ArrayList<>();
+
+        for (Account account : allAccounts) {
+            if (account.getName().equals(name1) || account.getName().equals(name2)) {
+                jointAccounts.add(account);
+            }
+        }
+
+        return jointAccounts;
+    }
+
+    @PostMapping("/createjointaccount")
+    public String createJointAccount(@RequestBody List<Account> accounts) {
+        if (accounts.size() != 2) {
+            return "Joint account requires exactly two account holders";
+        }
+
+        Account account1 = accounts.get(0);
+        Account account2 = accounts.get(1);
+
+        if (account1.getBalance() < 0 || account2.getBalance() < 0) {
+            return "Balance cannot be negative";
+        }
+
+        account1.setBalance(account1.getBalance() + account2.getBalance());
+        account2.setBalance(account1.getBalance());
+
+        accountService.saveAccount(account1);
+        accountService.saveAccount(account2);
+
+        return "Joint account created";
+    }
 
 }

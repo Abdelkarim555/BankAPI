@@ -30,4 +30,24 @@ public class AccountService {
     public void deleteAccount(Long id) {
         accountRepository.deleteById(id);
     }
+
+    public void addAccountHolder(Long id, String accountHolder) {
+        Optional<Account> optionalAccount = accountRepository.findById(id);
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+            List<String> accountHolders = account.getAccountHolders();
+            accountHolders.add(accountHolder);
+            accountRepository.save(account);
+        }
+    }
+
+    public void removeAccountHolder(Long id, String accountHolder) {
+        Optional<Account> optionalAccount = accountRepository.findById(id);
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+            List<String> accountHolders = account.getAccountHolders();
+            accountHolders.remove(accountHolder);
+            accountRepository.save(account);
+        }
+    }
 }
